@@ -1,0 +1,404 @@
+/* DocuBot Widget Styles */
+.docubot-widget {
+  position: fixed;
+  z-index: 999999;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.4;
+  --docubot-primary: #2563eb;
+  --docubot-accent: #7c3aed;
+}
+
+/* Position variants */
+.docubot-widget.docubot-bottom-right {
+  bottom: 20px;
+  right: 20px;
+}
+
+.docubot-widget.docubot-bottom-left {
+  bottom: 20px;
+  left: 20px;
+}
+
+.docubot-widget.docubot-top-right {
+  top: 20px;
+  right: 20px;
+}
+
+.docubot-widget.docubot-top-left {
+  top: 20px;
+  left: 20px;
+}
+
+/* Chat Bubble */
+.docubot-bubble {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, var(--docubot-primary) 0%, var(--docubot-accent) 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(37, 99, 235, 0.3);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.docubot-bubble:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 25px rgba(37, 99, 235, 0.4);
+}
+
+.docubot-bubble-icon {
+  color: white;
+  z-index: 2;
+  position: relative;
+}
+
+.docubot-bubble-pulse {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--docubot-primary) 0%, var(--docubot-accent) 100%);
+  animation: docubot-pulse 2s infinite;
+}
+
+@keyframes docubot-pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(1.2);
+    opacity: 0;
+  }
+}
+
+/* Chat Window */
+.docubot-chat-window {
+  width: 380px;
+  height: 600px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  bottom: 80px;
+  right: 0;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(20px) scale(0.95);
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.docubot-widget.docubot-open .docubot-chat-window {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+}
+
+.docubot-widget.docubot-open .docubot-bubble {
+  transform: scale(0.9);
+}
+
+/* Header */
+.docubot-header {
+  background: linear-gradient(135deg, var(--docubot-primary) 0%, var(--docubot-accent) 100%);
+  color: white;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.docubot-header-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.docubot-avatar {
+  width: 36px;
+  height: 36px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.docubot-title {
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.docubot-subtitle {
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+.docubot-close-btn {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.docubot-close-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Messages */
+.docubot-messages {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+}
+
+.docubot-message {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+  align-items: flex-start;
+}
+
+.docubot-message-user {
+  flex-direction: row-reverse;
+}
+
+.docubot-message-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.docubot-message-bot .docubot-message-avatar {
+  background: linear-gradient(135deg, var(--docubot-accent) 0%, #a855f7 100%);
+  color: white;
+}
+
+.docubot-message-user .docubot-message-avatar {
+  background: var(--docubot-primary);
+  color: white;
+}
+
+.docubot-message-content {
+  max-width: 70%;
+}
+
+.docubot-message-text {
+  padding: 12px 16px;
+  border-radius: 16px;
+  word-wrap: break-word;
+}
+
+.docubot-message-bot .docubot-message-text {
+  background: #f1f5f9;
+  color: #334155;
+  border-bottom-left-radius: 4px;
+}
+
+.docubot-message-user .docubot-message-text {
+  background: var(--docubot-primary);
+  color: white;
+  border-bottom-right-radius: 4px;
+}
+
+.docubot-message-time {
+  font-size: 11px;
+  color: #64748b;
+  margin-top: 4px;
+  padding: 0 4px;
+}
+
+.docubot-message-user .docubot-message-time {
+  text-align: right;
+}
+
+/* Typing Indicator */
+.docubot-typing-dots {
+  display: flex;
+  gap: 4px;
+  padding: 12px 16px;
+  background: #f1f5f9;
+  border-radius: 16px;
+  border-bottom-left-radius: 4px;
+}
+
+.docubot-typing-dots span {
+  width: 6px;
+  height: 6px;
+  background: #64748b;
+  border-radius: 50%;
+  animation: docubot-typing 1.4s infinite;
+}
+
+.docubot-typing-dots span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.docubot-typing-dots span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes docubot-typing {
+  0%, 60%, 100% {
+    transform: translateY(0);
+    opacity: 0.5;
+  }
+  30% {
+    transform: translateY(-8px);
+    opacity: 1;
+  }
+}
+
+/* Input Area */
+.docubot-input-area {
+  padding: 16px 20px;
+  border-top: 1px solid #e2e8f0;
+  background: white;
+}
+
+.docubot-input-container {
+  display: flex;
+  gap: 8px;
+  align-items: flex-end;
+}
+
+.docubot-input {
+  flex: 1;
+  padding: 12px 16px;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  resize: none;
+  font-family: inherit;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.docubot-input:focus {
+  border-color: var(--docubot-primary);
+}
+
+.docubot-send-btn {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, var(--docubot-primary) 0%, var(--docubot-accent) 100%);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.docubot-send-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+
+.docubot-send-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.docubot-powered-by {
+  text-align: center;
+  font-size: 11px;
+  color: #64748b;
+  margin-top: 8px;
+}
+
+/* Dark theme */
+.docubot-widget.docubot-dark .docubot-chat-window {
+  background: #1e293b;
+  color: white;
+}
+
+.docubot-widget.docubot-dark .docubot-messages {
+  background: #1e293b;
+}
+
+.docubot-widget.docubot-dark .docubot-message-bot .docubot-message-text {
+  background: #334155;
+  color: #e2e8f0;
+}
+
+.docubot-widget.docubot-dark .docubot-input-area {
+  background: #1e293b;
+  border-top-color: #334155;
+}
+
+.docubot-widget.docubot-dark .docubot-input {
+  background: #334155;
+  border-color: #475569;
+  color: white;
+}
+
+.docubot-widget.docubot-dark .docubot-input::placeholder {
+  color: #94a3b8;
+}
+
+.docubot-widget.docubot-dark .docubot-typing-dots {
+  background: #334155;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 480px) {
+  .docubot-chat-window {
+    width: calc(100vw - 40px);
+    height: calc(100vh - 100px);
+    bottom: 80px;
+    right: 20px;
+    left: 20px;
+  }
+  
+  .docubot-widget.docubot-bottom-left .docubot-chat-window,
+  .docubot-widget.docubot-top-left .docubot-chat-window,
+  .docubot-widget.docubot-top-right .docubot-chat-window {
+    right: 20px;
+    left: 20px;
+  }
+}
+
+/* Scrollbar styling */
+.docubot-messages::-webkit-scrollbar {
+  width: 4px;
+}
+
+.docubot-messages::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.docubot-messages::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 2px;
+}
+
+.docubot-messages::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}

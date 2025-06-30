@@ -1,0 +1,140 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: DocuBot.AI - Serverless Document Chat Platform
+
+Globals:
+  Function:
+    Timeout: 30
+    Runtime: nodejs18.x
+    Environment:
+      Variables:
+        DOCUMENTS_BUCKET: !Ref DocumentsBucket
+        BEDROCK_REGION: us-east-1
+
+Parameters:
+  Environment:
+    Type: String
+    Default: dev
+    AllowedValues: [dev, staging, prod]
+
+Resources:
+  # S3 Bucket for document storage
+  DocumentsBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub 'docubot-documents-${Environment}-${AWS::AccountId}'
+      CorsConfiguration:
+        CorsRules:
+          - AllowedHeaders: ['*']
+            AllowedMethods: [GET, POST, PUT, DELETE]
+            AllowedOrigins: ['*']
+            MaxAge: 3600
+      LifecycleConfiguration:
+        Rules:
+          - Id: DeleteTemporaryFiles
+            Status: Enabled
+            ExpirationInDays: 7
+
+  # API Gateway
+  DocuBotApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: !Ref Environment
+      Cors:
+        AllowMethods: "'GET,POST,PUT,DELETE,OPTIONS'"
+        AllowHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+        AllowOrigin: "'*'"
+
+  # Document Upload Function
+  UploadFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/upload/
+      Handler: index.handler
+      Events:
+        UploadApi:
+          Type: Api
+          Properties:
+            RestApiId: !Ref DocuBotApi
+            Path: /upload
+            Method: post
+      Policies:
+        - S3WritePolicy:
+            BucketName: !Ref DocumentsBucket
+        - Statement:
+            - Effect: Allow
+              Action:
+                - bedrock:InvokeModel
+              Resource: '*'
+
+  # Document Processing Function
+  ProcessFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/process/
+      Handler: index.handler
+      Timeout: 300
+      Events:
+        S3Event:
+          Type: S3
+          Properties:
+            Bucket: !Ref DocumentsBucket
+            Events: s3:ObjectCreated:*
+      Policies:
+        - S3ReadPolicy:
+            BucketName: !Ref DocumentsBucket
+        - S3WritePolicy:
+            BucketName: !Ref DocumentsBucket
+        - Statement:
+            - Effect: Allow
+              Action:
+                - bedrock:InvokeModel
+              Resource: '*'
+
+  # Chat Function
+  ChatFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/chat/
+      Handler: index.handler
+      Events:
+        ChatApi:
+          Type: Api
+          Properties:
+            RestApiId: !Ref DocuBotApi
+            Path: /chat
+            Method: post
+      Policies:
+        - S3ReadPolicy:
+            BucketName: !Ref DocumentsBucket
+        - Statement:
+            - Effect: Allow
+              Action:
+                - bedrock:InvokeModel
+              Resource: '*'
+
+  # Document Info Function
+  DocumentInfoFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/document-info/
+      Handler: index.handler
+      Events:
+        DocumentInfoApi:
+          Type: Api
+          Properties:
+            RestApiId: !Ref DocuBotApi
+            Path: /documents/{documentId}
+            Method: get
+      Policies:
+        - S3ReadPolicy:
+            BucketName: !Ref DocumentsBucket
+
+Outputs:
+  ApiGatewayUrl:
+    Description: "API Gateway endpoint URL"
+    Value: !Sub "https://${DocuBotApi}.execute-api.${AWS::Region}.amazonaws.com/${Environment}/"
+  
+  DocumentsBucket:
+    Description: "S3 Bucket for document storage"
+    Value: !Ref DocumentsBucket

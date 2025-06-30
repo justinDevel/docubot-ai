@@ -1,0 +1,22 @@
+{
+  "name": "docubot-sdk",
+  "version": "1.0.0",
+  "description": "Embeddable chat widget for DocuBot.AI",
+  "main": "dist/docubot-sdk.js",
+  "scripts": {
+    "build": "webpack --mode=production",
+    "dev": "webpack --mode=development --watch",
+    "serve": "webpack serve --mode=development"
+  },
+  "keywords": ["chat", "widget", "ai", "documents", "embed"],
+  "author": "DocuBot.AI",
+  "license": "MIT",
+  "devDependencies": {
+    "webpack": "^5.89.0",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^4.15.1",
+    "css-loader": "^6.8.1",
+    "style-loader": "^3.3.3",
+    "mini-css-extract-plugin": "^2.7.6"
+  }
+}

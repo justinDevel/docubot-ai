@@ -1,0 +1,27 @@
+{
+  "name": "docubot-lambda",
+  "version": "1.0.0",
+  "description": "AWS Lambda functions for DocuBot.AI",
+  "main": "index.js",
+  "scripts": {
+    "deploy": "sam build && sam deploy --guided",
+    "build": "sam build",
+    "local": "sam local start-api",
+    "test": "jest"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.1490.0",
+    "@aws-sdk/client-bedrock-runtime": "^3.470.0",
+    "@aws-sdk/client-s3": "^3.470.0",
+    "pdf-parse": "^1.1.1",
+    "mammoth": "^1.6.0",
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "aws-sam-cli": "^1.100.0"
+  },
+  "keywords": ["aws", "lambda", "serverless", "ai", "chat"],
+  "author": "DocuBot.AI",
+  "license": "MIT"
+}
